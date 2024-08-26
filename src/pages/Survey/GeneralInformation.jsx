@@ -24,8 +24,16 @@ function GeneralInformation(props) {
   const [damages, setDamages] = useState(false);
   const [pets, setPets] = useState(false);
   const [moneyOwed, setMoneyOwed] = useState(false);
-  const [privateOwner, setPrivateOwner] = useState(false);
   const [professionallyManaged, setProfessionallyManaged] = useState(false);
+
+  const handleChangeManager = (e) => {
+    var { id, value } = e.target;
+    if (value === "Management Firm") {
+      setProfessionallyManaged(true);
+    } else {
+      setProfessionallyManaged(false);
+    }
+  }
 
   return (
 
@@ -42,7 +50,7 @@ function GeneralInformation(props) {
           <input
             className="w-full rounded border-slate-300"
             type="text"
-            disabled="true"
+            disabled={true}
             {...register('attention_to')}
             required
           />
@@ -56,7 +64,7 @@ function GeneralInformation(props) {
           <input
             className="w-full rounded border-slate-300"
             type="text"
-            disabled="true"
+            disabled={true}
             {...register('owner_name')}
             required
           />
@@ -75,14 +83,13 @@ function GeneralInformation(props) {
         <div className="grid col-span-4">
           <label className="block">Fax #:</label>
           <div>
-            <span className="pmrequired">*Required</span>
+            <span className="pmrequired"></span>
           </div>
           <input
             className="w-full rounded border-slate-300"
             type="text"
-            disabled="true"
+            disabled={true}
             {...register('owner_fax')}
-            required
           />
         </div>
       </div>
@@ -96,14 +103,14 @@ function GeneralInformation(props) {
           <EmailInput name={'owner_email'} required={true} readOnly={true} />
         </div>
         <div className="grid col-span-4">
-          <label className="block">Complex:</label>
+          <label className="block">Property Address:</label>
           <div>
             <span className="pmrequired">*Required</span>
           </div>
           <select
             className="w-full rounded border-slate-300"
             type="text"
-            disabled="true"
+            disabled={true}
             {...register('complex')}
             required>
             <option value={null}>Select an option</option>
@@ -133,15 +140,14 @@ function GeneralInformation(props) {
 
       <div className="grid gap-5 grid-cols-1 md:grid-cols-12">
         <div className="grid col-span-4">
-          <label className="block">Apt #:</label>
+          <label className="block">Apartment/Suite:</label>
           <div>
-            <span className="pmrequired">*Required</span>
+            <span className="pmrequired"></span>
           </div>
           <input
             className="w-full rounded border-slate-300"
             type="text"
             {...register('apartment_number')}
-            required
           />
         </div>
         <div className="grid col-span-4">
@@ -154,7 +160,7 @@ function GeneralInformation(props) {
             type="text"
             {...register('current_previous')}
             required>
-            <option value={null}>Select an option</option>
+            <option value={""}>Select an option</option>
             <option value={"Current"}>Current</option>
             <option value={"Previous"}>Previous</option>
           </select>
@@ -168,6 +174,7 @@ function GeneralInformation(props) {
             className="w-full rounded border-slate-300"
             type="number"
             {...register('number_occupants')}
+            min={0}
             required
           />
         </div>
@@ -176,7 +183,7 @@ function GeneralInformation(props) {
       <div className="grid gap-x-5 grid-cols-1 md:grid-cols-12">
 
         <div className="grid col-span-12">
-          Dates of Residency
+          Move-In/Move-Out Information
         </div>
 
         <div className="grid col-span-4">
@@ -215,7 +222,7 @@ function GeneralInformation(props) {
             {...register("notice_30_60_days")}
             type="radio"
             name="notice_30_60_days"
-            value="true"
+            value={true}
             className="mt-1 border-slate-300"
             required
           />
@@ -225,7 +232,7 @@ function GeneralInformation(props) {
             {...register("notice_30_60_days")}
             type="radio"
             name="notice_30_60_days"
-            value="false"
+            value={false}
             className="ml-5 mt-1 border-slate-300"
             required
           />
@@ -289,6 +296,7 @@ function GeneralInformation(props) {
             className="w-full rounded border-slate-300"
             type="number"
             {...register('monthly_rent_amount')}
+            min={0}
             required
           />
         </div>
@@ -304,7 +312,7 @@ function GeneralInformation(props) {
             {...register("pays_on_time")}
             type="radio"
             name="pays_on_time"
-            value="true"
+            value={true}
             className="mt-1 border-slate-300"
             required
           />
@@ -314,7 +322,7 @@ function GeneralInformation(props) {
             {...register("pays_on_time")}
             type="radio"
             name="pays_on_time"
-            value="false"
+            value={false}
             className="ml-5 mt-1 border-slate-300"
             required
           />
@@ -324,7 +332,7 @@ function GeneralInformation(props) {
 
       <div className="grid gap-5 grid-cols-1 md:grid-cols-12">
         <div className="grid col-span-4">
-          <label className="block">Number of late payment</label>
+          <label className="block">How many times did the tenant make a late rent payment?</label>
           <div>
             <span className="pmrequired">*Required</span>
           </div>
@@ -332,11 +340,12 @@ function GeneralInformation(props) {
             className="w-full rounded border-slate-300"
             type="number"
             {...register('number_late_payments')}
+            min={0}
             required
           />
         </div>
         <div className="grid col-span-4">
-          <label className="block">Number of NSF Checks:</label>
+          <label className="block">How many NSF (Non-Sufficient Funds) checks were received from the tenant?</label>
           <div>
             <span className="pmrequired">*Required</span>
           </div>
@@ -344,6 +353,7 @@ function GeneralInformation(props) {
             className="w-full rounded border-slate-300"
             type="number"
             {...register('number_NSF_checks')}
+            min={0}
             required
           />
         </div>
@@ -359,7 +369,7 @@ function GeneralInformation(props) {
             {...register("non_compliance")}
             type="radio"
             name="non_compliance"
-            value="true"
+            value={true}
             onChange={(e) => { setLettersOfNoncompliance(true) }}
             className="mt-1 border-slate-300"
             required
@@ -370,7 +380,7 @@ function GeneralInformation(props) {
             {...register("non_compliance")}
             type="radio"
             name="non_compliance"
-            value="false"
+            value={false}
             onChange={(e) => { setLettersOfNoncompliance(false) }}
             className="ml-5 mt-1 border-slate-300"
             required
@@ -384,7 +394,7 @@ function GeneralInformation(props) {
           <div className="grid col-span-12">
             <label className="block">Reason:</label>
             <div>
-              <span className="pmrequired">*</span>
+              <span className="pmrequired"></span>
             </div>
             <input
               className="w-full rounded border-slate-300"
@@ -405,7 +415,7 @@ function GeneralInformation(props) {
             {...register("any_damage")}
             type="radio"
             name="any_damage"
-            value="true"
+            value={true}
             onChange={(e) => { setDamages(true) }}
             className="mt-1 border-slate-300"
             required
@@ -416,7 +426,7 @@ function GeneralInformation(props) {
             {...register("any_damage")}
             type="radio"
             name="any_damage"
-            value="false"
+            value={false}
             onChange={(e) => { setDamages(false) }}
             className="ml-5 mt-1 border-slate-300"
             required
@@ -431,7 +441,7 @@ function GeneralInformation(props) {
           <div className="grid col-span-12">
             <label className="block">If yes explain:</label>
             <div>
-              <span className="pmrequired">*</span>
+              <span className="pmrequired"></span>
             </div>
             <input
               className="w-full rounded border-slate-300"
@@ -453,7 +463,7 @@ function GeneralInformation(props) {
             {...register("any_pets")}
             type="radio"
             name="any_pets"
-            value="true"
+            value={true}
             onChange={(e) => { setPets(true) }}
             className="mt-1 border-slate-300"
             required
@@ -464,7 +474,7 @@ function GeneralInformation(props) {
             {...register("any_pets")}
             type="radio"
             name="any_pets"
-            value="false"
+            value={false}
             onChange={(e) => { setPets(false) }}
             className="ml-5 mt-1 border-slate-300"
             required
@@ -478,7 +488,7 @@ function GeneralInformation(props) {
           <div className="grid col-span-12">
             <label className="block">If yes how many and what kind?:</label>
             <div>
-              <span className="pmrequired">*Required</span>
+              <span className="pmrequired"></span>
             </div>
             <input
               className="w-full rounded border-slate-300"
@@ -491,7 +501,7 @@ function GeneralInformation(props) {
 
       <div className="grid">
         <label>
-          Any money owed to your complex?
+          Does the tenant have any unpaid charges or balances with your property?
         </label>
         <span className="pmrequired">*Required</span>
         <div className="flex">
@@ -499,7 +509,7 @@ function GeneralInformation(props) {
             {...register("money_owed")}
             type="radio"
             name="money_owed"
-            value="true"
+            value={true}
             onChange={(e) => { setMoneyOwed(true) }}
             className="mt-1 border-slate-300"
             required
@@ -510,7 +520,7 @@ function GeneralInformation(props) {
             {...register("money_owed")}
             type="radio"
             name="money_owed"
-            value="false"
+            value={false}
             onChange={(e) => { setMoneyOwed(false) }}
             className="ml-5 mt-1 border-slate-300"
             required
@@ -525,7 +535,7 @@ function GeneralInformation(props) {
           <div className="grid col-span-12">
             <label className="block">If yes, please explain why:</label>
             <div>
-              <span className="pmrequired">*Required</span>
+              <span className="pmrequired"></span>
             </div>
             <input
               className="w-full rounded border-slate-300"
@@ -539,7 +549,7 @@ function GeneralInformation(props) {
 
       <div className="grid">
         <label>
-          Was their security deposit refunded?
+          Was the tenant's security deposit fully refunded?
         </label>
         <span className="pmrequired">*Required</span>
         <div className="flex">
@@ -547,7 +557,7 @@ function GeneralInformation(props) {
             {...register("security_deposit_refunded")}
             type="radio"
             name="security_deposit_refunded"
-            value="true"
+            value={true}
             className="mt-1 border-slate-300"
             required
           />
@@ -557,7 +567,7 @@ function GeneralInformation(props) {
             {...register("security_deposit_refunded")}
             type="radio"
             name="security_deposit_refunded"
-            value="false"
+            value={false}
             className="ml-5 mt-1 border-slate-300"
             required
           />
@@ -575,7 +585,7 @@ function GeneralInformation(props) {
             {...register("rent_again_to_renter")}
             type="radio"
             name="rent_again_to_renter"
-            value="true"
+            value={true}
             className="mt-1 border-slate-300"
             required
           />
@@ -585,7 +595,7 @@ function GeneralInformation(props) {
             {...register("rent_again_to_renter")}
             type="radio"
             name="rent_again_to_renter"
-            value="false"
+            value={false}
             className="ml-5 mt-1 border-slate-300"
             required
           />
@@ -603,7 +613,7 @@ function GeneralInformation(props) {
             {...register("related_to_applicant")}
             type="radio"
             name="related_to_applicant"
-            value="true"
+            value={true}
             className="mt-1 border-slate-300"
             required
           />
@@ -613,7 +623,7 @@ function GeneralInformation(props) {
             {...register("related_to_applicant")}
             type="radio"
             name="related_to_applicant"
-            value="false"
+            value={false}
             className="ml-5 mt-1 border-slate-300"
             required
           />
@@ -622,106 +632,51 @@ function GeneralInformation(props) {
       </div>
 
 
-      <div className="grid">
-        <label>
-          Private owner?
-        </label>
-        <span className="pmrequired">*Required</span>
-        <div className="flex">
-          <input
-            {...register("private_owner")}
-            type="radio"
-            name="private_owner"
-            value="true"
-            onChange={(e) => { setPrivateOwner(true) }}
-            className="mt-1 border-slate-300"
-            required
-          />
-          <label className="ml-1">Yes</label>
-
-          <input
-            {...register("private_owner")}
-            type="radio"
-            name="private_owner"
-            value="false"
-            onChange={(e) => { setPrivateOwner(false) }}
-            className="ml-5 mt-1 border-slate-300"
-            required
-          />
-          <label className="ml-1">No</label>
-        </div>
-      </div>
-
-      {privateOwner ? <>
-
-        <div className="grid gap-5 grid-cols-1 md:grid-cols-12">
-          <div className="grid col-span-4">
-            <label className="block">Name of owner:</label>
-            <div>
-              <span className="pmrequired">*Required</span>
-            </div>
-            <input
-              className="w-full rounded border-slate-300"
-              type="text"
-              {...register('owner_name')}
-              required
-            />
-          </div>
-        </div>
-      </> : null}
-
-      <div className="grid">
-        <label>
-          Professionally managed?
-        </label>
-        <span className="pmrequired">*Required</span>
-        <div className="flex">
-          <input
-            {...register("professionally_managed")}
-            type="radio"
-            name="professionally_managed"
-            value="true"
-            onChange={(e) => { setProfessionallyManaged(true) }}
-            className="mt-1 border-slate-300"
-            required
-          />
-          <label className="ml-1">Yes</label>
-
-          <input
-            {...register("professionally_managed")}
-            type="radio"
-            name="professionally_managed"
-            value="false"
-            onChange={(e) => { setProfessionallyManaged(false) }}
-            className="ml-5 mt-1 border-slate-300"
-            required
-          />
-          <label className="ml-1">No</label>
-        </div>
-      </div>
-
-      {professionallyManaged ? <>
-
-        <div className="grid gap-5 grid-cols-1 md:grid-cols-12">
-          <div className="grid col-span-4">
-            <label className="block">Management company name:</label>
-            <div>
-              <span className="pmrequired">*</span>
-            </div>
-            <input
-              className="w-full rounded border-slate-300"
-              type="text"
-              {...register('management_company_name')}
-            />
-          </div>
-        </div>
-
-      </> : null}
       <div className="grid gap-5 grid-cols-1 md:grid-cols-12">
         <div className="grid col-span-4">
-          <label className="block">Any Complaints or Comments?:</label>
+          <label>
+            Was the property under the management of the owner or handled by a third-party property management firm?
+          </label>
           <div>
-            <span className="pmrequired">*</span>
+            <span className="pmrequired">*Required</span>
+          </div>
+          <select
+            className="w-full rounded border-slate-300"
+            type="text"
+            {...register('manager_type')}
+            onChange={handleChangeManager}
+            required>
+            <option value={null}>Select an option</option>
+            <option value={"Owner"}>Owner</option>
+            <option value={"Management Firm"}>Management Firm</option>
+          </select>
+        </div>
+      </div>
+
+      {
+        professionallyManaged ? <>
+
+          <div className="grid gap-5 grid-cols-1 md:grid-cols-12">
+            <div className="grid col-span-4">
+              <label className="block">Management company name:</label>
+              <div>
+                <span className="pmrequired"></span>
+              </div>
+              <input
+                className="w-full rounded border-slate-300"
+                type="text"
+                {...register('management_company_name')}
+              />
+            </div>
+          </div>
+
+        </> : null
+      }
+      <div className="grid gap-5 grid-cols-1 md:grid-cols-12">
+        <div className="grid col-span-4">
+          <label className="block">Do you have any concerns or feedback regarding the tenant?</label>
+          <div>
+            <span className="pmrequired"></span>
           </div>
           <input
             className="w-full rounded border-slate-300"
@@ -730,7 +685,7 @@ function GeneralInformation(props) {
           />
         </div>
       </div>
-    </div>
+    </div >
   );
 }
 

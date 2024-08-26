@@ -58,7 +58,7 @@ function LandlordApplications() {
         const applications = data.applications;
         console.log(applications);
         if (applications.length === 0) {
-          stopLoading();
+          
           if(searchParams.get("complex")){
             await swal.fire("Info", "This complex does not have applications, try removing filters", "info");
           }else{
@@ -71,10 +71,12 @@ function LandlordApplications() {
           applications
         }));
       } else {
+        stopLoading();
         await swal.fire("¡Ups!", "Error getting applications", "error");
       }
     } catch (e) {
       console.log(e);
+      stopLoading();
       await swal.fire("¡Ups!", "Error getting applications", "error");
     }
     //recaptchaRef.current.reset();
@@ -94,6 +96,7 @@ function LandlordApplications() {
         const complexes = data.complex;
         console.log(complexes);
         if (complexes.length === 0) {
+          stopLoading();
           await swal.fire("Info", "You don't have complexes yet", "info");
         }
         setState((prevState) => ({
@@ -101,14 +104,16 @@ function LandlordApplications() {
           complexes
         }));
       } else {
+        stopLoading();
         await swal.fire("¡Ups!", "Error getting complexes", "error");
       }
     } catch (e) {
       console.log(e);
+      stopLoading();
       await swal.fire("¡Ups!", "Error getting complexes", "error");
     }
     //recaptchaRef.current.reset();
-    stopLoading();
+    
   };
 
   return (

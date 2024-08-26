@@ -17,19 +17,24 @@ function VerificationOfRentalHistory() {
   const { reset, getValues, handleSubmit, formState: { isSubmitSuccessful } } = methods;
   const [disabled, setDisabled] = useState(false);
   const [state, setState] = useState({
-    complexes: [{}, {}]
+    complexes: []
   });
 
   var defaultValues = {};
 
   const submitApplication = async () => {
-
+    alert(1);
     const data = getValues();
     console.log(data);
     //data[data.purpose] = true;
-    setDisabled(true);
+    //setDisabled(true);
 
     await createSurveyClick(data);
+  };
+
+  const catchFormErrors = async (e) => {
+    alert("catchError");
+    console.log(e);
   };
 
   useEffect(() => {
@@ -186,7 +191,7 @@ function VerificationOfRentalHistory() {
 
   return (
     <FormProvider {...methods}>
-      <form onSubmit={handleSubmit(submitApplication)}>
+      <form onSubmit={handleSubmit(submitApplication, catchFormErrors)}>
         <div className="flex h-[100dvh]">
           <div className="relative flex flex-col flex-1 bg-smoke dark:bg-slate-900">
             <main className={disabled ? "submitted" : "grow"}>
@@ -204,8 +209,6 @@ function VerificationOfRentalHistory() {
                 </fieldset>
               </div>
             </main>
-
-
           </div>
         </div>
       </form>

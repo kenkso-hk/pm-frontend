@@ -1,14 +1,8 @@
 import React, { useEffect, useRef, useState } from "react";
 import { useFormContext } from "react-hook-form";
-import PhoneInput from "react-phone-number-input/input";
 import swal from "sweetalert2";
 
-/*Preguntas
-
-
-*/
-
-function PhoneInputCustom({ name, onChange, value, required = true, readOnly = false, className }) {
+function PhoneInput({ name, onChange, value, required = true, readOnly = false, className }) {
     const ref = useRef();
     const { register, setValue } = useFormContext();
     const [inputMaxLength, setInputMaxLength] = useState(16);
@@ -50,10 +44,10 @@ function PhoneInputCustom({ name, onChange, value, required = true, readOnly = f
             <input
                 {...register(name, {
                     required: required,
-                    pattern: {
+                    /*pattern: {
                         value: phoneRegex,
                         message: "Please enter a valid phone number"
-                    }
+                    }*/
                 })}
                 name={name}
                 className={className || 'cclphoneinput rounded border-slate-300'}
@@ -69,4 +63,4 @@ function PhoneInputCustom({ name, onChange, value, required = true, readOnly = f
     );
 }
 
-export default React.memo(PhoneInputCustom);
+export default React.memo(PhoneInput);

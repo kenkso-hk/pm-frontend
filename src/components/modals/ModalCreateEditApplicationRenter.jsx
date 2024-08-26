@@ -139,12 +139,13 @@ function ModalCreateEditApplicationRenter(props) {
                         <div hidden={true}>
                             <label className="block text-sm font-medium mb-1" htmlFor="status">Status <span className="text-rose-500">*</span></label>
                             <select id="status" className="form-input w-full px-2 py-1" value={state.application?.status} onChange={handleChange} disabled={true} required>
-                                <option value={null}>Select an option</option>
+                            <option value={null}>Select an option</option>
                                 <option value="New">New</option>
                                 <option value="Under Review">Under Review</option>
-                                <option value="Accepted">Accepted</option>
+                                <option value="Approved">Approved</option>
+                                <option value="Denied">Denied</option>
                                 <option value="Cancelled by applicant">Cancelled by applicant</option>
-                                <option value="Cancelled by renter">Cancelled by renter</option>
+                                
                             </select>
                         </div>
                         <div hidden={true}>

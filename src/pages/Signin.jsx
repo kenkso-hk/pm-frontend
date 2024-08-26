@@ -62,7 +62,10 @@ function Signin() {
       stopLoading();
       if (await requestSuccess(res)) {
         localStorage.setItem("JWT", data.jwtToken);
-        //Util.getValidJWTInfo(setStateApp);
+        localStorage.setItem("user", JSON.stringify({
+          ...data.user,
+          user_type: data.user_type
+        }));
         if (data.user_type === "Renter")
           window.location.href = "/my-applications";
         else
@@ -107,7 +110,7 @@ function Signin() {
         await swal.fire("Listo!", "Your email was verified, you can now log in.", "success");
       } else {
         await swal.fire("Ups!", "Error verifying email." + data.error, "error");
-        
+
         return;
       }
     } catch (e) {
