@@ -74,9 +74,6 @@ function MyApplicationsTable(props) {
                 <th className="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
                   <div className="font-semibold text-left">Status</div>
                 </th>
-                <th className="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
-                  <span className="sr-only">Menu</span>
-                </th>
               </tr>
             </thead>
             {/* Table body */}

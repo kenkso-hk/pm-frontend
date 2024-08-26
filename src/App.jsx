@@ -53,6 +53,7 @@ import AccordionPage from './pages/component/AccordionPage';
 import IconsPage from './pages/component/IconsPage';
 import LoadingIndicator from './components/LoadingIndicator';
 import ApplicationAndOffer from './pages/RenterSignUp';
+import ApplicationForm from './pages/ApplicationForm';
 import Survey from './pages/Survey';
 import LandlordApplications from './pages/LandlordPortal/LandlordApplications';
 import MyComplexes from './pages/LandlordPortal/MyComplexes';
@@ -112,6 +113,7 @@ function App() {
         <Route path="/component/breadcrumb" element={<BreadcrumbPage />} />
         <Route path="/component/badge" element={<BadgePage />} />
         <Route path="/survey/:id_application" element={<Survey />} />
+        <Route path="/application/:id_complex" element={<ApplicationForm />} />
 
         <Route path="/component/tooltip" element={<TooltipPage />} />
         <Route path="/component/accordion" element={<AccordionPage />} />

@@ -22,11 +22,6 @@ function ApplicationsTableItem(props) {
       </td>
       <td className="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
         <div className="flex items-center">
-          <div className="font-medium text-slate-800 dark:text-slate-100">{props.application?._id}</div>
-        </div>
-      </td>
-      <td className="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
-        <div className="flex items-center">
           <div className="font-medium text-slate-800 dark:text-slate-100">{props.application?.user?.given_name + " " + props.application?.user?.family_name}</div>
         </div>
       </td>

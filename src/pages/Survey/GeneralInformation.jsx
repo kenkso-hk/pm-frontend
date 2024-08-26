@@ -2,6 +2,8 @@
 import React, { useEffect, useState } from "react";
 import { useFormContext } from "react-hook-form";
 import swal from 'sweetalert2';
+import EmailInput from "../../components/inputs/EmailInput";
+import PhoneInput from "../../components/inputs/PhoneInput";
 
 function GeneralInformation(props) {
   const { register } = useFormContext();
@@ -10,7 +12,6 @@ function GeneralInformation(props) {
   })
 
   useEffect(() => {
-    console.log("");
     setState((prevState) => ({
       ...prevState,
       complexes: props.complexes,
@@ -41,7 +42,6 @@ function GeneralInformation(props) {
           <input
             className="w-full rounded border-slate-300"
             type="text"
-            value={state.landlord?.contact_person || ""}
             disabled="true"
             {...register('attention_to')}
             required
@@ -56,7 +56,6 @@ function GeneralInformation(props) {
           <input
             className="w-full rounded border-slate-300"
             type="text"
-            value={state.landlord?.name || ""}
             disabled="true"
             {...register('owner_name')}
             required
@@ -70,14 +69,7 @@ function GeneralInformation(props) {
           <div>
             <span className="pmrequired">*Required</span>
           </div>
-          <input
-            className="w-full rounded border-slate-300"
-            type="text"
-            value={state.landlord?.phone || ""}
-            disabled="true"
-            {...register('onwer_phone')}
-            required
-          />
+          <PhoneInput name={"onwer_phone"} readOnly={true} />
         </div>
 
         <div className="grid col-span-4">
@@ -88,7 +80,6 @@ function GeneralInformation(props) {
           <input
             className="w-full rounded border-slate-300"
             type="text"
-            value={state.landlord?.fax || ""}
             disabled="true"
             {...register('owner_fax')}
             required
@@ -102,14 +93,7 @@ function GeneralInformation(props) {
           <div>
             <span className="pmrequired">*Required</span>
           </div>
-          <input
-            className="w-full rounded border-slate-300"
-            type="email"
-            value={state.landlord?.email || ""}
-            disabled="true"
-            {...register('owner_email')}
-            required
-          />
+          <EmailInput name={'owner_email'} required={true} readOnly={true} />
         </div>
         <div className="grid col-span-4">
           <label className="block">Complex:</label>
@@ -119,7 +103,6 @@ function GeneralInformation(props) {
           <select
             className="w-full rounded border-slate-300"
             type="text"
-            value={state.application?.complex?._id || null}
             disabled="true"
             {...register('complex')}
             required>

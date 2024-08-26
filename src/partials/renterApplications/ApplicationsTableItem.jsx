@@ -40,7 +40,7 @@ function ApplicationsTableItem(props) {
       <td className="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
         <div className="text-left font-medium text-sky-500">{props.application.status}</div>
       </td>
-      <td className="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap w-px">
+      <td className="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap w-px" hidden={true}>
         {/* Menu button */}
         <button className="text-slate-400 hover:text-slate-500 dark:text-slate-500 dark:hover:text-slate-400 rounded-full" onClick={()=>editApplication()}>
           <span className="sr-only">Menu</span>

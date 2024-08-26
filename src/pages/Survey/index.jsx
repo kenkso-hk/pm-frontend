@@ -1,32 +1,32 @@
 import React, { useEffect, useState } from "react";
 import { FormProvider, useForm } from 'react-hook-form';
+import { useParams } from "react-router-dom";
+import swal from 'sweetalert2';
+
 import HeaderForm from "./HeaderForm";
 import GeneralInformation from "./GeneralInformation";
 import Footer from "./Footer";
 import Api from "../../utils/api";
-import swal from 'sweetalert2';
 import { requestSuccess, validEmail } from '../../utils/Utils';
 import useLoading from '../../hooks/useLoading';
 
-import {
-  useParams,
-} from "react-router-dom";
-
 function VerificationOfRentalHistory() {
-  const {startLoading, stopLoading} = useLoading();
+  const { startLoading, stopLoading } = useLoading();
   const params = useParams();
   const methods = useForm();
-  const { getValues, handleSubmit, formState: { isSubmitSuccessful } } = methods;
+  const { reset, getValues, handleSubmit, formState: { isSubmitSuccessful } } = methods;
   const [disabled, setDisabled] = useState(false);
   const [state, setState] = useState({
     complexes: [{}, {}]
   });
 
+  var defaultValues = {};
+
   const submitApplication = async () => {
-    
+
     const data = getValues();
     console.log(data);
-    data[data.purpose] = true;
+    //data[data.purpose] = true;
     setDisabled(true);
 
     await createSurveyClick(data);
@@ -39,27 +39,30 @@ function VerificationOfRentalHistory() {
   }, []);
 
   const validateData = async (data) => {
-    console.log(data);
-    if (new Date(data.birth_date) > new Date()) {
-      await swal.fire("Ups!", "Please insert past date for your birthdate", "error");
+    try{
+      console.log(data);
+      if (new Date(data.birth_date) > new Date()) {
+        await swal.fire("Ups!", "Please insert past date for your birthdate", "error");
+        return false;
+      }
+      return true;
+    }catch(e){
+      await swal.fire("Ups!", "Error validating survey data", "error");
       return false;
     }
-    if (data.password.length < 8) {
-      await swal.fire("Ups!", "Your password must have at least 8 characters", "error");
-      return false;
-    }
-    return true;
+    
   }
 
   const createSurveyClick = async (data) => {
     try {
-      //if (!await validateData(data)) return;
+      if (!await validateData(data)) return;
       startLoading();
       var res = await Api.survey.create(data);
 
       console.log(res);
       var data = await res.json();
       console.log(data);
+      stopLoading();
       if (await requestSuccess(res)) {
         await swal.fire("OK!", "Thank you for the information!", "success");
       } else {
@@ -67,9 +70,10 @@ function VerificationOfRentalHistory() {
       }
     } catch (e) {
       console.log(e);
+      stopLoading();
       await swal.fire("¡Ups!", "Failed saving your survey. You may have problems with your internet connection.", "error");
     }
-    //recaptchaRef.current.reset();
+    
     stopLoading();
   };
 
@@ -91,10 +95,12 @@ function VerificationOfRentalHistory() {
         }));
 
       } else {
+        stopLoading();
         await swal.fire("Ups!", "Error getting complexes", "error");
       }
     } catch (e) {
       console.log(e);
+      stopLoading();
       await swal.fire("Ups!", "Error getting complexes", "error");
     }
     stopLoading();
@@ -111,19 +117,30 @@ function VerificationOfRentalHistory() {
       if (await requestSuccess(res)) {
         var data = await res.json();
         console.log(data);
+        const application = data.application;
         setState((prevState) => ({
           ...prevState,
-          application: data.application
+          application
         }));
 
+        defaultValues = {
+          ...defaultValues,
+          complex: application.complex._id,
+          application: application._id,
+        }
+
+        reset(defaultValues);
+
       } else {
+        stopLoading();
         await swal.fire("Ups!", "Error getting application", "error");
       }
     } catch (e) {
       console.log(e);
+      stopLoading();
       await swal.fire("Ups!", "Error getting application", "error");
     }
-    //recaptchaRef.current.reset();
+    
     stopLoading();
   };
 
@@ -138,19 +155,32 @@ function VerificationOfRentalHistory() {
       if (await requestSuccess(res)) {
         var data = await res.json();
         console.log(data);
+        const landlord = data.landlord;
         setState((prevState) => ({
           ...prevState,
-          landlord: data.landlord
+          landlord
         }));
 
+        defaultValues = {
+          ...defaultValues,
+          owner_email: landlord.email,
+          owner_name: landlord.name,
+          attention_to: landlord.contact_person,
+          onwer_phone: landlord.phone,
+          owner_fax: landlord.fax,
+        }
+
+        reset(defaultValues);
+
       } else {
+        stopLoading();
         await swal.fire("Ups!", "Error getting landlord", "error");
       }
     } catch (e) {
       console.log(e);
+      stopLoading();
       await swal.fire("Ups!", "Error getting landlord", "error");
     }
-    //recaptchaRef.current.reset();
     stopLoading();
   };
 

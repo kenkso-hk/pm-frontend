@@ -1,17 +1,18 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { FormProvider, useForm } from 'react-hook-form';
-import HeaderForm from "../ApplicationForm/HeaderForm";
-import GeneralInformation from "../ApplicationForm/GeneralInformation";
-import MinorsToOccupy from "../ApplicationForm/MinorsToOccupy";
-import ApplicantIncomes from "../ApplicationForm/ApplicantIncomes";
-import ResidenceHistory from "../ApplicationForm/RentalHistory";
-import AnimalsInformation from "../ApplicationForm/AnimalsInformation";
-import EmergencyContact from "../ApplicationForm/EmergencyContact";
-import Vehicles from "../ApplicationForm/Vehicles";
-import CriminalRecord from "../ApplicationForm/CriminalRecord";
-import Footer from "../ApplicationForm/Footer";
-
+import { useParams } from "react-router-dom";
+import HeaderForm from "./HeaderForm";
+import GeneralInformation from "./GeneralInformation";
+import MinorsToOccupy from "./MinorsToOccupy";
+import ApplicantIncomes from "./ApplicantIncomes";
+import RentalHistory from "./RentalHistory";
+import AnimalsInformation from "./AnimalsInformation";
+import EmergencyContact from "./EmergencyContact";
+import Vehicles from "./Vehicles";
+import CriminalRecord from "./CriminalRecord";
+import Footer from "./Footer";
 import useLoading from '../../hooks/useLoading';
+import useAuth from '../../hooks/useAuth';
 
 
 import { requestSuccess, validEmail } from '../../utils/Utils';
@@ -19,9 +20,18 @@ import { requestSuccess, validEmail } from '../../utils/Utils';
 import swal from 'sweetalert2';
 import Api from '../../utils/api';
 
-function ApplicationAndOffer() {
+function ApplicationForm() {
   const { startLoading, stopLoading } = useLoading();
-  const methods = useForm();
+  const { isAuthenticated } = useAuth();
+  const methods = useForm({
+    defaultValues: {
+      family_name: "Juan",
+      email: "kajsdhkjfasd@gmail.com",
+      minors_to_ocuppy: [{}]
+    }
+
+  });
+  const params = useParams();
   const { getValues, handleSubmit, formState: { isSubmitSuccessful } } = methods;
   const [disabled, setDisabled] = useState(false);
   const [state, setState] = useState({
@@ -30,9 +40,10 @@ function ApplicationAndOffer() {
 
   const submitApplication = async () => {
     const data = getValues();
+    //data[data.purpose] = true;
     setDisabled(true);
     console.log(data);
-    await createUserClick(data);
+    //await createApplicationClick(state.register);
   };
 
   const handleDataFromChildArray = (data, childName) => {
@@ -45,15 +56,19 @@ function ApplicationAndOffer() {
     }));
   };
 
+  useEffect(() => {
+    getComplexAPI();
+  }, []);
+
   const handleDataFromChild = (id, value) => {
-    setState((prevState) => ({
+    /*setState((prevState) => ({
       ...prevState,
       register: {
         ...prevState.register,
         [id]: value
       }
     }));
-    console.log(state);
+    console.log(state);*/
   };
 
   const validateData = async (data) => {
@@ -75,22 +90,27 @@ function ApplicationAndOffer() {
     return true;
   }
 
-  const createUserClick = async (userData) => {
+  const createApplicationClick = async (userData) => {
     try {
       if (!await validateData(userData)) return;
       startLoading();
-      var res = await Api.users.create(userData);
+      var res;
+      if (isAuthenticated) {
+        res = await Api.application.create(userData, params.id_complex);
+      } else {
+        res = await Api.application.createAndSignUp(userData, params.id_complex);
+      }
 
       console.log(res);
       var data = await res.json();
       console.log(data);
+      stopLoading();
       if (!await requestSuccess(res)) {
         console.log(data.msg);
-        stopLoading();
         await swal.fire("Ups!", "Error creating user", "error");
         return;
       }
-      stopLoading();
+
       const { value: ConfirmationCode } = await swal.fire({
         title: 'Email sended',
         icon: 'success',
@@ -103,7 +123,7 @@ function ApplicationAndOffer() {
       });
 
       if (!ConfirmationCode) {
-
+        //handleLoading(false);
         return;
       }
       startLoading();
@@ -111,22 +131,47 @@ function ApplicationAndOffer() {
         email: userData.email,
         ConfirmationCode
       });
+      stopLoading();
 
       data = await res.json();
       if (requestSuccess(res)) {
-        stopLoading();
-        await swal.fire("OK!", "Your email has been verified, and your application sended", "success");
+        await swal.fire("OK!", "Your email has been verified, you can now log in", "success");
         window.location.href = "/";
       } else {
-        stopLoading();
         await swal.fire("Ups!", "Error verifying email." + data.msg, "error");
-
+        //handleLoading(false);
+        //recaptchaRef.current.reset();
         return;
       }
     } catch (e) {
       console.log(e);
       stopLoading();
       await swal.fire("¡Ups!", "Failed to login. You may have problems with your internet connection.", "error");
+    }
+  };
+
+  const getComplexAPI = async () => {
+    try {
+      startLoading();
+      var res = await Api.complex.get(params.id_complex);
+
+      console.log(res);
+
+
+      if (await requestSuccess(res)) {
+        var data = await res.json();
+        console.log(data);
+        setState((prevState) => ({
+          ...prevState,
+          complex: data.complex
+        }));
+
+      } else {
+        await swal.fire("Ups!", "Error getting complex information", "error");
+      }
+    } catch (e) {
+      console.log(e);
+      await swal.fire("Ups!", "Error getting complex information", "error");
     }
     stopLoading();
   };
@@ -141,7 +186,7 @@ function ApplicationAndOffer() {
             <main className={disabled ? "submitted" : "grow"}>
               <div className="rounded overflow-hidden shadow-lg bg-white">
                 <div className="px-4 sm:px-6 lg:px-8 pt-8 pb-3 w-full mx-auto">
-                  <HeaderForm />
+                  <HeaderForm complex={state.complex} />
                 </div>
                 <hr className=""></hr>
                 <fieldset>
@@ -157,7 +202,7 @@ function ApplicationAndOffer() {
                 </fieldset>
                 <hr className=""></hr>
                 <fieldset>
-                  <ResidenceHistory onUpdate={handleDataFromChildArray} />
+                  <RentalHistory onUpdate={handleDataFromChildArray} />
                 </fieldset>
                 <hr className=""></hr>
                 <fieldset>
@@ -190,4 +235,4 @@ function ApplicationAndOffer() {
   );
 }
 
-export default ApplicationAndOffer;
+export default ApplicationForm;
