@@ -5,6 +5,7 @@ import useLoading from '../../hooks/useLoading';
 import useApplication from '../../hooks/useApplication';
 import Api from '../../utils/api';
 import { requestSuccess } from '../../utils/Utils';
+import { Link, NavLink } from 'react-router-dom';
 
 function ModalCreateEditApplicationRenter(props) {
     const { startLoading, stopLoading } = useLoading();
@@ -127,20 +128,29 @@ function ModalCreateEditApplicationRenter(props) {
                                 ))}
                             </select>
                         </div>
-                        <div>
+                        {state.application?.complex && (
+                            <Link
+                                to={"/application/" + state.application?.complex}
+                                className="block text-slate-200 truncate transition duration-150"
+                            >
+                                <button className="btn-sm bg-indigo-500 hover:bg-indigo-600 text-black">Continue</button>
+                            </Link>
+                        )}
+                        <div hidden={true}>
                             <label className="block text-sm font-medium mb-1" htmlFor="status">Status <span className="text-rose-500">*</span></label>
                             <select id="status" className="form-input w-full px-2 py-1" value={state.application?.status} onChange={handleChange} disabled={true} required>
-                                <option value={null}>Select an option</option>
+                            <option value={null}>Select an option</option>
                                 <option value="New">New</option>
                                 <option value="Under Review">Under Review</option>
-                                <option value="Accepted">Accepted</option>
+                                <option value="Approved">Approved</option>
+                                <option value="Denied">Denied</option>
                                 <option value="Cancelled by applicant">Cancelled by applicant</option>
-                                <option value="Cancelled by renter">Cancelled by renter</option>
+                                
                             </select>
                         </div>
-                        <div>
+                        <div hidden={true}>
                             <label className="block text-sm font-medium mb-1" htmlFor="email">Feedback <span className="text-rose-500">*</span></label>
-                            <input id="feedback" className="form-input w-full px-2 py-1" type="email" value={state.application.feedback || ""} placeholder='The landlord can give you a feedback' onChange={handleChange} disabled={true}/>
+                            <input id="feedback" className="form-input w-full px-2 py-1" type="email" value={state.application.feedback || ""} placeholder='The landlord can give you a feedback' onChange={handleChange} disabled={true} />
                         </div>
                     </div>
 
@@ -149,7 +159,7 @@ function ModalCreateEditApplicationRenter(props) {
                 <div className="px-5 py-4 border-t border-slate-200 dark:border-slate-700">
                     <div className="flex flex-wrap justify-end space-x-2">
                         <button className="btn-sm border-slate-200 dark:border-slate-700 hover:border-slate-300 dark:hover:border-slate-600 text-slate-600 dark:text-slate-300" onClick={(e) => { e.stopPropagation(); closeApplicationModal(); }}>Cancel</button>
-                        <button className="btn-sm bg-indigo-500 hover:bg-indigo-600 text-white" onClick={createApplicationClick}>Save</button>
+                        <button className="btn-sm bg-indigo-500 hover:bg-indigo-600 text-white" hidden={true} onClick={createApplicationClick}>Save</button>
                     </div>
                 </div>
             </ModalBasic>

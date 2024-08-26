@@ -1,9 +1,9 @@
 import React from "react";
-import { useForm } from 'react-hook-form';
+import { useFormContext } from 'react-hook-form';
 
 function CriminalRecord({ onUpdate }) {
 
-  const { register } = useForm();
+  const { register } = useFormContext();
 
   const handleChangeCheckBox = (e) => {
     var { id, checked } = e.target;

@@ -42,6 +42,7 @@ export const requestSuccess = async (res, setStateApp, refreshPage = false) => {
     return false;
   } else if (res.status === 404) {
     await swal.fire("¡Ups!", "Recurso no encontrado", "error");
+    await swal.fire("¡Ups!", "Recurso no encontrado", "error");
     return false;
   } else {
     

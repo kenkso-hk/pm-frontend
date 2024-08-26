@@ -23,9 +23,6 @@ function ModalCreateEditApplicationLandlord(props) {
             startLoading();
             var res = await Api.complex.list();
 
-            console.log(res);
-
-
             if (await requestSuccess(res)) {
                 var data = await res.json();
                 console.log(data);
@@ -45,8 +42,6 @@ function ModalCreateEditApplicationLandlord(props) {
     };
 
     useEffect((() => {
-        console.log(1);
-        console.log(applicationToEdit);
         setState((prevState) => ({
             ...prevState,
             application: {
@@ -71,7 +66,6 @@ function ModalCreateEditApplicationLandlord(props) {
             }
 
         }));
-        console.log(state);
     };
 
     const createApplicationClick = async (e) => {
@@ -120,7 +114,7 @@ function ModalCreateEditApplicationLandlord(props) {
                     <div className="space-y-3">
                         <div>
                             <label className="block text-sm font-medium mb-1" htmlFor="email">Applicant <span className="text-rose-500">*</span></label>
-                            <input id="feedback" className="form-input w-full px-2 py-1" type="email" value={state.application?.user?.given_name || ""} placeholder='The landlord can give you a feedback' onChange={handleChange} disabled={true}/>
+                            <input id="feedback" className="form-input w-full px-2 py-1" type="email" value={state.application?.user?.given_name + " " + state.application?.user?.family_name || ""} placeholder='The landlord can give you a feedback' onChange={handleChange} disabled={true} />
                         </div>
                         <div>
                             <label className="block text-sm font-medium mb-1" htmlFor="complex">Complex <span className="text-rose-500">*</span></label>
@@ -137,9 +131,10 @@ function ModalCreateEditApplicationLandlord(props) {
                                 <option value={null}>Select an option</option>
                                 <option value="New">New</option>
                                 <option value="Under Review">Under Review</option>
-                                <option value="Accepted">Accepted</option>
+                                <option value="Approved">Approved</option>
+                                <option value="Denied">Denied</option>
                                 <option value="Cancelled by applicant">Cancelled by applicant</option>
-                                <option value="Cancelled by renter">Cancelled by renter</option>
+
                             </select>
                         </div>
                         <div>

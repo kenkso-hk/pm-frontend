@@ -1,8 +1,8 @@
 import { useContext } from 'react';
 import { LoadingContext } from '../context/LoadingContext';
 
-const useAuth = () => {
+const useLoading = () => {
   return useContext(LoadingContext);
 };
 
-export default useAuth;
+export default useLoading;

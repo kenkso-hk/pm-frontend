@@ -66,6 +66,9 @@ const Api = {
     getMyUser: () => {
       return fetch(apiURL + "/user/my-user", genericRequestJson());
     },
+    getByEmail: (email) => {
+      return fetch(apiURL + "/user/email/"+email, genericRequestJson());
+    },
     list: () => {
       return fetch(apiURL + "/user/", genericRequestJson());
     },
@@ -148,8 +151,15 @@ const Api = {
     },
   },
   application: {
-    create: (data) => {
-      return fetch(apiURL + "/application/", {
+    create: (data, id) => {
+      return fetch(apiURL + "/application/protected/" + id, {
+        ...genericRequestJson(),
+        method: "POST",
+        body: JSON.stringify(data),
+      });
+    },
+    createAndSignUp: (data, id) => {
+      return fetch(apiURL + "/application/signup/" + id, {
         ...genericRequestJson(),
         method: "POST",
         body: JSON.stringify(data),

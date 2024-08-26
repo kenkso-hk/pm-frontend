@@ -2,21 +2,19 @@ import React, { useState, useRef, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import Transition from '../utils/Transition';
 
+import useAuth from '../hooks/useAuth';
+
 import UserAvatar from '../images/user-avatar-32.png';
 import useUser from '../hooks/useUser';
 
-function DropdownProfile({
-  align
-}) {
-
+function DropdownProfile({ align }) {
+  const { logout } = useAuth();
   const { user } = useUser();
 
   const [dropdownOpen, setDropdownOpen] = useState(false);
 
   const trigger = useRef(null);
   const dropdown = useRef(null);
-
-  console.log(user);
 
   // close on click outside
   useEffect(() => {
@@ -90,7 +88,7 @@ function DropdownProfile({
               <Link
                 className="font-medium text-sm text-indigo-500 hover:text-indigo-600 dark:hover:text-indigo-400 flex items-center py-1 px-3"
                 to="/"
-                onClick={() => setDropdownOpen(!dropdownOpen)}
+                onClick={() => { logout(); setDropdownOpen(!dropdownOpen); }}
               >
                 Sign Out
               </Link>

@@ -3,7 +3,7 @@ import Transition from '../utils/Transition';
 import { useNavigate } from 'react-router-dom';
 
 function FilterSelect({ options, name, initialValue }) {
-  const [value, setValue] = useState(initialValue);
+  const [value, setValue] = useState(initialValue || "");
 
   const navigate = useNavigate();
 
@@ -29,7 +29,7 @@ function FilterSelect({ options, name, initialValue }) {
         <option
           tabIndex="0"
           value={""}>
-          <span>Select{name && " " + name}</span>
+          Select{(name && " " + name) || " an option"}
         </option>
         {
           options && options.map((option, index) => {
@@ -38,7 +38,7 @@ function FilterSelect({ options, name, initialValue }) {
                 key={option._id}
                 tabIndex="0"
                 value={option._id}>
-                <span>{option.address}</span>
+                {option.address}
               </option>
             )
           })

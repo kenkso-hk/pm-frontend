@@ -5,7 +5,7 @@ import Api from '../utils/api';
 import { requestSuccess, validEmail } from '../utils/Utils';
 import useLoading from '../hooks/useLoading';
 
-import MNDLogo from "../images/MNDLogo.png"
+import PMLogo from "../images/pm.png"
 
 function Signup() {
   const {startLoading, stopLoading} = useLoading();
@@ -110,7 +110,7 @@ function Signup() {
       } else {
         stopLoading();
         await swal.fire("Ups!", "Error verifying email." + data.msg, "error");
-        //recaptchaRef.current.reset();
+        
         return;
       }
 
@@ -118,7 +118,7 @@ function Signup() {
       console.log(e);
       stopLoading();
       await swal.fire("Ups!", "Error al registrar nuevo usuario", "error");
-      //recaptchaRef.current.reset();
+      
     }
     stopLoading();
   };
@@ -128,10 +128,10 @@ function Signup() {
   return (
     <main className="bg-white dark:bg-slate-900">
 
-      <div className="relative md:flex">
+      <div className="row">
 
         {/* Content */}
-        <div className="md:w-1/2">
+        <div className="col-md-6 col-sm-12">
           <div className="min-h-[100dvh] h-full flex flex-col after:flex-1">
 
             {/* Header */}
@@ -212,9 +212,8 @@ function Signup() {
         </div>
 
         {/* Image */}
-        <div className="hidden md:block absolute top-0 bottom-0 right-0 md:w-4/2" aria-hidden="true">
-          <img className="object-cover object-center w-full h-full" src={MNDLogo} alt="MDNLogo" />
-
+        <div className="col-md-6 col-sm-12" style={{ alignItems: "center", display: "flex" }}>
+          <img src={PMLogo} style={{ width: "100%", height: "auto" }} alt="MDNLogo" />
         </div>
 
       </div>
