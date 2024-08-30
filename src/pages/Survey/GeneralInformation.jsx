@@ -6,7 +6,7 @@ import EmailInput from "../../components/inputs/EmailInput";
 import PhoneInput from "../../components/inputs/PhoneInput";
 
 function GeneralInformation(props) {
-  const { register } = useFormContext();
+  const { register, setValue } = useFormContext();
   const [state, setState] = useState({
     complexes: []
   })
@@ -19,6 +19,12 @@ function GeneralInformation(props) {
       landlord: props.landlord
     }))
   }, [props]);
+
+  const handleChangeNumber = (e)=>{
+    var {id, value} = e.target;
+    if(value < 0) value = 0;
+    setValue(id, value);
+  }
 
   const [lettersOfNoncompliance, setLettersOfNoncompliance] = useState(false);
   const [damages, setDamages] = useState(false);
@@ -174,6 +180,8 @@ function GeneralInformation(props) {
             type="number"
             {...register('number_occupants_under_18')}
             min={0}
+            id="number_occupants_under_18"
+            onChange={handleChangeNumber}
             required
           />
         </div>
@@ -187,6 +195,8 @@ function GeneralInformation(props) {
             type="number"
             {...register('number_occupants_older_18')}
             min={0}
+            id="number_occupants_older_18"
+            onChange={handleChangeNumber}
             required
           />
         </div>
@@ -309,6 +319,8 @@ function GeneralInformation(props) {
             type="number"
             {...register('monthly_rent_amount')}
             min={0}
+            id="monthly_rent_amount"
+            onChange={handleChangeNumber}
             required
           />
         </div>
@@ -353,6 +365,8 @@ function GeneralInformation(props) {
             type="number"
             {...register('number_late_payments')}
             min={0}
+            id="number_late_payments"
+            onChange={handleChangeNumber}
             required
           />
         </div>
@@ -366,6 +380,8 @@ function GeneralInformation(props) {
             type="number"
             {...register('number_NSF_checks')}
             min={0}
+            id="number_NSF_checks"
+            onChange={handleChangeNumber}
             required
           />
         </div>
