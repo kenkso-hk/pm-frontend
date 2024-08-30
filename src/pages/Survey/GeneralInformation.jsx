@@ -130,7 +130,6 @@ function GeneralInformation(props) {
           <input
             className="w-full rounded border-slate-300"
             type="text"
-            value={state.application?.user?.given_name + " " + state.application?.user?.family_name || null}
             {...register('applicant_name')}
             required
           />
@@ -166,14 +165,27 @@ function GeneralInformation(props) {
           </select>
         </div>
         <div className="grid col-span-4">
-          <label className="block">Number of occupants:</label>
+          <label className="block">Number of occupants under -18:</label>
           <div>
             <span className="pmrequired">*Required</span>
           </div>
           <input
             className="w-full rounded border-slate-300"
             type="number"
-            {...register('number_occupants')}
+            {...register('number_occupants_under_18')}
+            min={0}
+            required
+          />
+        </div>
+        <div className="grid col-span-4">
+          <label className="block">Number of occupants 18+:</label>
+          <div>
+            <span className="pmrequired">*Required</span>
+          </div>
+          <input
+            className="w-full rounded border-slate-300"
+            type="number"
+            {...register('number_occupants_older_18')}
             min={0}
             required
           />

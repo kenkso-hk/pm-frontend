@@ -117,7 +117,7 @@ function ModalCreateEditApplicationLandlord(props) {
                             <input id="feedback" className="form-input w-full px-2 py-1" type="email" value={state.application?.user?.given_name + " " + state.application?.user?.family_name || ""} placeholder='The landlord can give you a feedback' onChange={handleChange} disabled={true} />
                         </div>
                         <div>
-                            <label className="block text-sm font-medium mb-1" htmlFor="complex">Complex <span className="text-rose-500">*</span></label>
+                            <label className="block text-sm font-medium mb-1" htmlFor="complex">Property Address <span className="text-rose-500">*</span></label>
                             <select id="complex" className="form-input w-full px-2 py-1" type="text" value={state.application?.complex} onChange={handleChange} disabled={true} required>
                                 <option value={null}>Select an option</option>
                                 {state.complexes.map((complex, index) => (

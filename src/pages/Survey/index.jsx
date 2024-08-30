@@ -23,11 +23,8 @@ function VerificationOfRentalHistory() {
   var defaultValues = {};
 
   const submitApplication = async () => {
-    alert(1);
     const data = getValues();
     console.log(data);
-    //data[data.purpose] = true;
-    //setDisabled(true);
 
     await createSurveyClick(data);
   };
@@ -132,6 +129,7 @@ function VerificationOfRentalHistory() {
           ...defaultValues,
           complex: application.complex._id,
           application: application._id,
+          applicant_name: application.user?.given_name + " " + application.user?.family_name
         }
 
         reset(defaultValues);
