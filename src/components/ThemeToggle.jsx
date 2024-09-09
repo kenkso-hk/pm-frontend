@@ -1,11 +1,13 @@
 import React from 'react';
+import { BsFillCloudyFill, BsStarFill } from 'react-icons/bs';
 import { useThemeProvider } from '../utils/ThemeContext';
+import { motion } from 'framer-motion';
 
 export default function ThemeToggle() {
   const { currentTheme, changeCurrentTheme } = useThemeProvider();
 
   return (
-    <div>
+    <div className=" h-[100px] flex items-center justify-center transition-colors">
       <input
         type="checkbox"
         name="light-switch"
@@ -15,28 +17,168 @@ export default function ThemeToggle() {
         onChange={() => changeCurrentTheme(currentTheme === 'light' ? 'dark' : 'light')}
       />
       <label
-        className="flex items-center justify-center cursor-pointer w-8 h-8 bg-slate-100 hover:bg-slate-200 dark:bg-slate-700 dark:hover:bg-slate-600/80 rounded-full"
         htmlFor="light-switch"
+        className={`p-1 w-16 rounded-full flex shadow-lg relative bg-gradient-to-b cursor-pointer ${
+          currentTheme === 'light'
+            ? 'justify-end from-blue-500 to-sky-300'
+            : 'justify-start from-indigo-600 to-indigo-400'
+        }`}
       >
-        <svg className="w-4 h-4 dark:hidden" width="16" height="16" xmlns="http://www.w3.org/2000/svg">
-          <path
-            className="fill-current text-slate-400"
-            d="M7 0h2v2H7V0Zm5.88 1.637 1.414 1.415-1.415 1.413-1.414-1.414 1.415-1.414ZM14 7h2v2h-2V7Zm-1.05 7.433-1.415-1.414 1.414-1.414 1.415 1.413-1.414 1.415ZM7 14h2v2H7v-2Zm-4.02.363L1.566 12.95l1.415-1.414 1.414 1.415-1.415 1.413ZM0 7h2v2H0V7Zm3.05-5.293L4.465 3.12 3.05 4.535 1.636 3.121 3.05 1.707Z"
-          />
-          <path className="fill-current text-slate-500" d="M8 4C5.8 4 4 5.8 4 8s1.8 4 4 4 4-1.8 4-4-1.8-4-4-4Z" />
-        </svg>
-        <svg className="w-4 h-4 hidden dark:block" width="16" height="16" xmlns="http://www.w3.org/2000/svg">
-          <path
-            className="fill-current text-slate-400"
-            d="M6.2 2C3.2 2.8 1 5.6 1 8.9 1 12.8 4.2 16 8.1 16c3.3 0 6-2.2 6.9-5.2C9.7 12.2 4.8 7.3 6.2 2Z"
-          />
-          <path
-            className="fill-current text-slate-500"
-            d="M12.5 6a.625.625 0 0 1-.625-.625 1.252 1.252 0 0 0-1.25-1.25.625.625 0 1 1 0-1.25 1.252 1.252 0 0 0 1.25-1.25.625.625 0 1 1 1.25 0c.001.69.56 1.249 1.25 1.25a.625.625 0 1 1 0 1.25c-.69.001-1.249.56-1.25 1.25A.625.625 0 0 1 12.5 6Z"
-          />
-        </svg>
-        <span className="sr-only">Switch to light / dark version</span>
+        <Thumb mode={currentTheme} />
+        {currentTheme === 'light' && <Clouds />}
+        {currentTheme === 'dark' && <Stars />}
       </label>
     </div>
   );
 }
+
+const Thumb = ({ mode }) => {
+  return (
+    <motion.div
+      layout
+      transition={{
+        duration: 0.75,
+        type: 'spring',
+      }}
+      className="h-6 w-6 rounded-full overflow-hidden shadow-lg relative"
+    >
+      <div
+        className={`absolute inset-0 ${
+          mode === 'dark'
+            ? 'bg-slate-100'
+            : 'animate-pulse bg-gradient-to-tr from-amber-300 to-yellow-500 rounded-full'
+        }`}
+      />
+      {mode === 'light' && <SunCenter />}
+      {mode === 'dark' && <MoonSpots />}
+    </motion.div>
+  );
+};
+
+const SunCenter = () => (
+  <div className="absolute inset-1 rounded-full bg-amber-300" />
+);
+
+const MoonSpots = () => (
+  <>
+    <motion.div
+      initial={{ x: -3, opacity: 0 }}
+      animate={{ x: 0, opacity: 1 }}
+      transition={{ delay: 0.15, duration: 0.35 }}
+      className="w-2 h-2 rounded-full bg-slate-300 absolute right-1.5 bottom-1"
+    />
+    <motion.div
+      initial={{ x: -3, opacity: 0 }}
+      animate={{ x: 0, opacity: 1 }}
+      transition={{ delay: 0.2, duration: 0.35 }}
+      className="w-2 h-2 rounded-full bg-slate-300 absolute left-1 bottom-3"
+    />
+    <motion.div
+      initial={{ x: -3, opacity: 0 }}
+      animate={{ x: 0, opacity: 1 }}
+      transition={{ delay: 0.25, duration: 0.35 }}
+      className="w-1.5 h-1.5 rounded-full bg-slate-300 absolute right-1.5 top-1.5"
+    />
+  </>
+);
+
+const Stars = () => {
+  return (
+    <>
+      <motion.span
+        animate={{
+          scale: [0.75, 1, 0.75],
+          opacity: [0.75, 1, 0.75],
+        }}
+        transition={{
+          repeat: Infinity,
+          duration: 5,
+          ease: 'easeIn',
+        }}
+        className="text-slate-300 text-[6px] absolute right-8 top-1.5"
+      >
+        <BsStarFill />
+      </motion.span>
+      <motion.span
+        animate={{
+          scale: [1, 0.75, 1],
+          opacity: [0.5, 0.25, 0.5],
+        }}
+        transition={{
+          repeat: Infinity,
+          duration: 3.5,
+          ease: 'easeIn',
+        }}
+        style={{ rotate: '-45deg' }}
+        className="text-slate-300 text-[10px] absolute right-3 top-2"
+      >
+        <BsStarFill />
+      </motion.span>
+      <motion.span
+        animate={{
+          scale: [1, 0.5, 1],
+          opacity: [1, 0.5, 1],
+        }}
+        style={{ rotate: '45deg' }}
+        transition={{
+          repeat: Infinity,
+          duration: 2.5,
+          ease: 'easeIn',
+        }}
+        className="text-slate-300 text-[8px] absolute right-7 top-7"
+      >
+        <BsStarFill />
+      </motion.span>
+    </>
+  );
+};
+
+const Clouds = () => {
+  return (
+    <>
+      <motion.span
+        animate={{ x: [-15, -10, -5, 0], opacity: [0, 1, 0.75, 1, 0] }}
+        transition={{
+          duration: 10,
+          repeat: Infinity,
+          delay: 0.25,
+        }}
+        className="text-white text-[6px] absolute left-8 top-1"
+      >
+        <BsFillCloudyFill />
+      </motion.span>
+      <motion.span
+        animate={{ x: [-10, 0, 10, 20], opacity: [0, 1, 0.75, 1, 0] }}
+        transition={{
+          duration: 20,
+          repeat: Infinity,
+          delay: 0.5,
+        }}
+        className="text-white text-[10px] absolute left-3 top-3"
+      >
+        <BsFillCloudyFill />
+      </motion.span>
+      <motion.span
+        animate={{ x: [-7, 0, 7, 14], opacity: [0, 1, 0.75, 1, 0] }}
+        transition={{
+          duration: 12.5,
+          repeat: Infinity,
+        }}
+        className="text-white text-[8px] absolute left-8 top-6"
+      >
+        <BsFillCloudyFill />
+      </motion.span>
+      <motion.span
+        animate={{ x: [-15, 0, 15, 30], opacity: [0, 1, 0.75, 1, 0] }}
+        transition={{
+          duration: 25,
+          repeat: Infinity,
+          delay: 0.75,
+        }}
+        className="text-white text-[6px] absolute left-12 top-3"
+      >
+        <BsFillCloudyFill />
+      </motion.span>
+    </>
+  );
+};
