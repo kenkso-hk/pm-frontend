@@ -1,167 +1,177 @@
-import { useEffect, useRef ,useState} from "react";
-import { TbLayoutGridFilled, TbLayoutFilled } from "react-icons/tb"; // Import the icons
-import { useLocation } from "react-router-dom";
+import * as React from 'react';
+import { styled, useTheme } from '@mui/material/styles';
+import Box from '@mui/material/Box';
+import MuiDrawer from '@mui/material/Drawer';
+import CssBaseline from '@mui/material/CssBaseline';
+import Divider from '@mui/material/Divider';
+import IconButton from '@mui/material/IconButton';
+import MenuIcon from '@mui/icons-material/Menu';
+import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
+import ChevronRightIcon from '@mui/icons-material/ChevronRight';
+import List from '@mui/material/List';
+import ListItem from '@mui/material/ListItem';
+import ListItemButton from '@mui/material/ListItemButton';
+import ListItemIcon from '@mui/material/ListItemIcon';
+import ListItemText from '@mui/material/ListItemText';
+import HomeIcon from '@mui/icons-material/Home';
+import WorkIcon from '@mui/icons-material/Work';
+import ApartmentIcon from '@mui/icons-material/Apartment';
+import { NavLink } from 'react-router-dom';
+import Typography from '@mui/material/Typography';
 
-function Sidebar({
-  sidebarOpen,
-  setSidebarOpen
-}) {
-  const location = useLocation();
-  const { pathname } = location;
+const sidebarWidth = 240;
 
-  const trigger = useRef(null);
-  const sidebar = useRef(null);
+const openSidebarMixin = (theme) => ({
+  width: sidebarWidth,
+  transition: theme.transitions.create('width', {
+    easing: theme.transitions.easing.sharp,
+    duration: theme.transitions.duration.enteringScreen,
+  }),
+  overflowX: 'hidden',
+  backgroundColor: '#f7f7f7',
+  backgroundImage: 'url("/path-to-your-image.jpg")',
+  backgroundSize: 'cover',
+});
 
-  const storedSidebarExpanded = localStorage.getItem('sidebar-expanded');
-  const [sidebarExpanded, setSidebarExpanded] = useState(storedSidebarExpanded === null ? false : storedSidebarExpanded === 'true');
+const closedSidebarMixin = (theme) => ({
+  transition: theme.transitions.create('width', {
+    easing: theme.transitions.easing.sharp,
+    duration: theme.transitions.duration.leavingScreen,
+  }),
+  overflowX: 'hidden',
+  width: `calc(${theme.spacing(7)} + 1px)`,
+  [theme.breakpoints.up('sm')]: {
+    width: `calc(${theme.spacing(8)} + 1px)`,
+  },
+  backgroundColor: '#f7f7f7',
+  backgroundImage: 'url("/path-to-your-image.jpg")',
+  backgroundSize: 'cover',
+});
 
-  // Close on click outside
-  useEffect(() => {
-    const clickHandler = ({ target }) => {
-      if (!sidebar.current || !trigger.current) return;
-      if (!sidebarOpen || sidebar.current.contains(target) || trigger.current.contains(target)) return;
-      setSidebarOpen(false);
-    };
-    document.addEventListener('click', clickHandler);
-    return () => document.removeEventListener('click', clickHandler);
+const SidebarHeader = styled('div')(({ theme }) => ({
+  display: 'flex',
+  alignItems: 'center',
+  justifyContent: 'flex-end',
+  padding: theme.spacing(0, 1),
+  ...theme.mixins.toolbar,
+}));
+
+const SidebarDrawer = styled(MuiDrawer, { shouldForwardProp: (prop) => prop !== 'open' })(
+  ({ theme, open }) => ({
+    width: sidebarWidth,
+    flexShrink: 0,
+    whiteSpace: 'nowrap',
+    boxSizing: 'border-box',
+    ...(open && {
+      ...openSidebarMixin(theme),
+      '& .MuiDrawer-paper': openSidebarMixin(theme),
+    }),
+    ...(!open && {
+      ...closedSidebarMixin(theme),
+      '& .MuiDrawer-paper': closedSidebarMixin(theme),
+    }),
+  }),
+);
+
+export default function CustomSidebar() {
+  const theme = useTheme();
+  const [isOpen, setIsOpen] = React.useState(true);
+
+  const openSidebar = () => {
+    setIsOpen(true);
+  };
+
+  const closeSidebar = () => {
+    setIsOpen(false);
+  };
+
+  const navLinkStyles = ({ isActive }) => ({
+    backgroundColor: isActive ? '#1976d2' : 'transparent',
+    color: isActive ? '#fff' : 'inherit',
+    borderRadius: '10px',
+    margin: '0 10px',
+    minHeight: 48,
+    justifyContent: isOpen ? 'initial' : 'center',
+    px: 2.5,
   });
-
-  // Close if the esc key is pressed
-  useEffect(() => {
-    const keyHandler = ({ keyCode }) => {
-      if (!sidebarOpen || keyCode !== 27) return;
-      setSidebarOpen(false);
-    };
-    document.addEventListener('keydown', keyHandler);
-    return () => document.removeEventListener('keydown', keyHandler);
-  });
-
-  useEffect(() => {
-    localStorage.setItem('sidebar-expanded', sidebarExpanded);
-    if (sidebarExpanded) {
-      document.querySelector('body').classList.add('sidebar-expanded');
-    } else {
-      document.querySelector('body').classList.remove('sidebar-expanded');
-    }
-  }, [sidebarExpanded]);
 
   return (
-    <div className="min-w-fit">
-      {/* Sidebar backdrop (mobile only) */}
-      <div
-        className={`fixed inset-0 bg-slate-900 bg-opacity-30 z-40 transition-opacity duration-200 lg:hidden ${sidebarOpen ? 'opacity-100' : 'opacity-0 pointer-events-none'}`}
-        aria-hidden="true"
-      ></div>
+    <Box sx={{ display: 'flex' }}>
+      <CssBaseline />
 
-      {/* Sidebar */}
-      <div
-        id="sidebar"
-        ref={sidebar}
-        className={`flex flex-col fixed z-40 left-0 top-0 h-full overflow-y-scroll no-scrollbar bg-slate-800 p-4 transition-all duration-200 ease-in-out
-          ${sidebarOpen ? 'translate-x-0' : '-translate-x-64'} 
-          ${sidebarExpanded ? 'w-64' : 'w-20'}
-          lg:static lg:translate-x-0`}
-      >
-        {/* Sidebar header */}
-        <div className="flex justify-between mb-10 pr-3 sm:px-2">
-          {/* Close button */}
-          <button
-            ref={trigger}
-            className="lg:hidden text-slate-500 hover:text-slate-400"
-            onClick={() => setSidebarOpen(!sidebarOpen)}
-            aria-controls="sidebar"
-            aria-expanded={sidebarOpen}
-          >
-            <span className="sr-only">Close sidebar</span>
-            <svg className="w-6 h-6 fill-current" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-              <path d="M10.7 18.7l1.4-1.4L7.8 13H20v-2H7.8l4.3-4.3-1.4-1.4L4 12z" />
-            </svg>
-          </button>
-        </div>
+      <SidebarDrawer variant="permanent" open={isOpen}>
+        <SidebarHeader>
+          {isOpen && (
+            <IconButton onClick={closeSidebar}>
+              {theme.direction === 'rtl' ? <ChevronRightIcon /> : <ChevronLeftIcon />}
+            </IconButton>
+          )}
+        </SidebarHeader>
 
-        {/* Expand / collapse button centered */}
-        <div className="flex justify-center items-center my-4">
-          <div className="px-3 py-2">
-            <button onClick={() => setSidebarExpanded(!sidebarExpanded)}>
-              <span className="sr-only">Expand / collapse sidebar</span>
-              {sidebarExpanded ? (
-                <TbLayoutFilled className="w-6 h-6 fill-current transition-transform duration-200" />
-              ) : (
-                <TbLayoutGridFilled className="w-6 h-6 fill-current transition-transform duration-200" />
-              )}
-            </button>
-          </div>
-        </div>
+        {isOpen && (
+          <Box sx={{ padding: 2 }}>
+            <Typography variant="h6" component="div">
+              Welcome!
+            </Typography>
+            <Typography variant="body2" color="text.secondary">
+              Select an option from the menu.
+            </Typography>
+          </Box>
+        )}
 
-        {/* Links */}
-        <div className="space-y-8">
-          {/* Pages group */}
-          <div>
-            {/* Heading with pages */}
-            <h3 className="text-xs uppercase text-slate-500 font-semibold pl-3">
-              <span className="hidden lg:block lg:sidebar-expanded:hidden text-center w-6" aria-hidden="true">
-                •••
-              </span>
-              <span className="lg:hidden lg:sidebar-expanded:block">Pages</span>
-            </h3>
-            <ul className="mt-3">
-              <li className={`px-3 py-2 rounded-sm mb-0.5 ${pathname.includes('inbox') && 'bg-slate-900'}`}>
-                <button
-                  onClick={() => { window.location.href = '/landlord-dashboard'; }}
-                  className="w-full text-left block text-slate-200 truncate transition duration-150 hover:text-white"
+        <Divider style={{ borderColor: '#1976d2', borderWidth: '1px',
+        marginTop: "-2px"
+      }} />
+
+        <List>
+          {[
+            { text: 'Home', path: '/landlord-dashboard', icon: <HomeIcon /> },
+            { text: 'My Applications', path: '/landlord-applications', icon: <WorkIcon /> },
+            { text: 'My Complex', path: '/my-complexes', icon: <ApartmentIcon /> },
+          ].map((item) => (
+            <ListItem key={item.text} disablePadding sx={{ display: 'block' }}>
+              <ListItemButton
+                component={NavLink}
+                to={item.path}
+                style={navLinkStyles}
+                // Aquí no abrimos el Drawer al hacer clic en un ícono
+              >
+                <ListItemIcon
+                  sx={{
+                    minWidth: 0,
+                    mr: isOpen ? 3 : 'auto',
+                    justifyContent: 'center',
+                    color: 'inherit',
+                  }}
                 >
-                  <div className="flex items-center">
-                    <svg className="shrink-0 h-6 w-6" viewBox="0 0 24 24">
-                      <path className="fill-current text-slate-600" d="M16 13v4H8v-4H0l3-9h18l3 9h-8Z" />
-                      <path className="fill-current text-slate-400" d="m23.72 12 .229.686A.984.984 0 0 1 24 13v8a1 1 0 0 1-1 1H1a1 1 0 0 1-1-1v-8c0-.107.017-.213.051-.314L.28 12H8v4h8v-4H23.72ZM13 0v7h3l-4 5-4-5h3V0h2Z" />
-                    </svg>
-                    <span className={`ml-3 text-sm font-medium transition-opacity duration-200 ${sidebarExpanded ? 'opacity-100' : 'opacity-0'}`}>
-                      Home
-                    </span>
-                  </div>
-                </button>
-              </li>
+                  {item.icon}
+                </ListItemIcon>
+                {/* Solo mostrar el texto si el drawer está abierto */}
+                <ListItemText primary={item.text} sx={{ opacity: isOpen ? 1 : 0 }} />
+              </ListItemButton>
+            </ListItem>
+          ))}
+        </List>
 
-              <li className={`px-3 py-2 rounded-sm mb-0.5 last:mb-0 ${pathname.includes('inbox') && 'bg-slate-900'}`}>
-                <button
-                  onClick={() => { window.location.href = '/landlord-applications'; }}
-                  className={`w-full text-left block text-slate-200 truncate transition duration-150 ${pathname.includes('inbox') ? 'hover:text-slate-200' : 'hover:text-white'}`}
-                >
-                  <div className="flex items-center">
-                    <svg className="shrink-0 h-6 w-6" viewBox="0 0 24 24">
-                      <path className={`fill-current ${pathname.includes('inbox') ? 'text-indigo-500' : 'text-slate-600'}`} d="M16 13v4H8v-4H0l3-9h18l3 9h-8Z" />
-                      <path className={`fill-current ${pathname.includes('inbox') ? 'text-indigo-300' : 'text-slate-400'}`} d="m23.72 12 .229.686A.984.984 0 0 1 24 13v8a1 1 0 0 1-1 1H1a1 1 0 0 1-1-1v-8c0-.107.017-.213.051-.314L.28 12H8v4h8v-4H23.72ZM13 0v7h3l-4 5-4-5h3V0h2Z" />
-                    </svg>
-                    <span className="text-sm font-medium ml-3 lg:opacity-0 lg:sidebar-expanded:opacity-100 2xl:opacity-100 duration-200">
-                      My Applications
-                    </span>
-                  </div>
-                </button>
-              </li>
+      
+      </SidebarDrawer>
 
-              <li className={`px-3 py-2 rounded-sm mb-0.5 last:mb-0 ${pathname.includes('inbox') && 'bg-slate-900'}`}>
-                <button
-                  onClick={() => { window.location.href = '/my-complexes'; }}
-                  className={`w-full text-left block text-slate-200 truncate transition duration-150 ${pathname.includes('inbox') ? 'hover:text-slate-200' : 'hover:text-white'}`}
-                >
-                  <div className="flex items-center">
-                    <svg className="shrink-0 h-6 w-6" viewBox="0 0 24 24">
-                      <path className={`fill-current ${pathname.includes('inbox') ? 'text-indigo-500' : 'text-slate-600'}`} d="M16 13v4H8v-4H0l3-9h18l3 9h-8Z" />
-                      <path className={`fill-current ${pathname.includes('inbox') ? 'text-indigo-300' : 'text-slate-400'}`} d="m23.72 12 .229.686A.984.984 0 0 1 24 13v8a1 1 0 0 1-1 1H1a1 1 0 0 1-1-1v-8c0-.107.017-.213.051-.314L.28 12H8v4h8v-4H23.72ZM13 0v7h3l-4 5-4-5h3V0h2Z" />
-                    </svg>
-                    <span className="text-sm font-medium ml-3 lg:opacity-0 lg:sidebar-expanded:opacity-100 2xl:opacity-100 duration-200">
-                      My Complex
-                    </span>
-                  </div>
-                </button>
-              </li>
-
-            </ul>
-          </div>
-        </div>
-      </div>
-    </div>
+      {!isOpen && (
+        <IconButton
+          color="inherit"
+          aria-label="open drawer"
+          onClick={openSidebar}
+          edge="center"
+          sx={{
+            position: 'fixed',
+            top: 10,
+            left: 10,
+            zIndex: 1300,
+          }}
+        >
+          <MenuIcon />
+        </IconButton>
+      )}
+    </Box>
   );
 }
-
-export default Sidebar;
